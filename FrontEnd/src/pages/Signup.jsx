@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { AuthContext } from "../context/Authcontext";
 import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 import { sendOtp } from "../services/Otp";
 import OtpStep from "./OtpStep";
 
@@ -11,19 +11,35 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(120deg, #f3e8ff 0%, #f8fafc 100%);
+  position: relative;
+  background: linear-gradient(120deg, #a78bfa 0%, #f8fafc 100%);
+  overflow: hidden;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 60%;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, #7c3aed55 0%, #fff0 80%);
+    filter: blur(40px);
+    z-index: 0;
+  }
 `;
 
 const Form = styled.form`
   width: 420px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.85);
   padding: 40px 32px 32px 32px;
   border-radius: 18px;
-  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.08);
+  box-shadow: 0 8px 32px rgba(124, 58, 237, 0.13);
   display: flex;
   flex-direction: column;
   gap: 18px;
   align-items: center;
+  backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 1;
   @media (max-width: 600px) {
     padding: 24px 8px 18px 8px;
     max-width: 98vw;
@@ -188,8 +204,41 @@ const Signup = () => {
     <Container>
       {step === 0 ? (
         <Form onSubmit={submit}>
-          <Title>Create Account</Title>
-          <Subtitle>Sign up to manage your expenses and income</Subtitle>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                width: 62,
+                height: 62,
+                borderRadius: "50%",
+                background: "linear-gradient(135deg,#a78bfa 40%,#7c3aed 100%)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 10,
+                boxShadow: "0 2px 12px #a78bfa33",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 34,
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontFamily: "monospace",
+                }}
+              >
+                ET
+              </span>
+            </div>
+            <Title style={{ marginBottom: 0 }}>Create Account</Title>
+            <Subtitle>Sign up to manage your expenses and income</Subtitle>
+          </div>
           <Input
             type="text"
             placeholder="Full Name"
@@ -224,55 +273,113 @@ const Signup = () => {
                   : "#fff0f0",
             }}
           />
-          <div style={{ position: "relative", width: "100%" }}>
-            <Input
-              type={show ? "text" : "password"}
-              placeholder="Password (min 8 chars, upper/lowercase, digit, special)"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-              minLength={8}
+          <Input
+            type="password"
+            placeholder="Password (min 8 chars, upper/lowercase, digit, special)"
+            value={form.password}
+            onChange={(e) => setForm({ ...form, password: e.target.value })}
+            required
+            minLength={8}
+            style={{
+              borderColor:
+                form.password.length === 0
+                  ? "#e5e7eb"
+                  : passwordValid
+                  ? "#222"
+                  : "#ef4444",
+              color:
+                form.password.length === 0
+                  ? undefined
+                  : passwordValid
+                  ? "#222"
+                  : "#ef4444",
+              background:
+                form.password.length === 0
+                  ? undefined
+                  : passwordValid
+                  ? undefined
+                  : "#fff0f0",
+            }}
+          />
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              marginBottom: 8,
+            }}
+          >
+            <label
               style={{
-                borderColor:
-                  form.password.length === 0
-                    ? "#e5e7eb"
-                    : passwordValid
-                    ? "#222"
-                    : "#ef4444",
-                color:
-                  form.password.length === 0
-                    ? undefined
-                    : passwordValid
-                    ? "#222"
-                    : "#ef4444",
-                background:
-                  form.password.length === 0
-                    ? undefined
-                    : passwordValid
-                    ? undefined
-                    : "#fff0f0",
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => setShow((s) => !s)}
-              style={{
-                position: "absolute",
-                right: 10,
-                top: 8,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
+                color: "#7c3aed",
+                fontWeight: 600,
+                marginBottom: 6,
+                fontSize: "1.08rem",
+                alignSelf: "center",
               }}
             >
-              {show ? <FaEyeSlash /> : <FaEye />}
-            </button>
+              Profile Picture
+            </label>
+            <div
+              style={{
+                width: 92,
+                height: 92,
+                borderRadius: "50%",
+                background: "#f3e8ff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginBottom: 8,
+                boxShadow: preview ? "0 2px 12px #a78bfa33" : "none",
+                border: preview
+                  ? "2.5px solid #a78bfa"
+                  : "2.5px dashed #a78bfa",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              {preview ? (
+                <img
+                  src={preview}
+                  alt="preview"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              ) : (
+                <span
+                  style={{
+                    color: "#a78bfa",
+                    fontSize: 32,
+                    fontWeight: 700,
+                    fontFamily: "monospace",
+                    opacity: 0.7,
+                  }}
+                >
+                  ?
+                </span>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={onFile}
+                required
+                style={{
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  left: 0,
+                  top: 0,
+                  opacity: 0,
+                  cursor: "pointer",
+                }}
+              />
+            </div>
+            <span
+              style={{ color: "#a78bfa", fontSize: "0.98rem", marginBottom: 2 }}
+            >
+              Click to upload (required)
+            </span>
           </div>
-          <label style={{ alignSelf: "flex-start", color: "#7c3aed" }}>
-            Profile Picture (optional)
-          </label>
-          <FileInput type="file" accept="image/*" onChange={onFile} />
-          {preview && <Preview src={preview} alt="preview" />}
           {err && (
             <div
               style={{
@@ -288,12 +395,26 @@ const Signup = () => {
               {err}
             </div>
           )}
-          <Button type="submit" disabled={sending}>
+          <Button
+            type="submit"
+            disabled={sending}
+            style={{ marginTop: 10, marginBottom: 6 }}
+          >
             {sending ? "Sending OTP..." : "SIGN UP"}
           </Button>
-          <div style={{ textAlign: "center", marginTop: 8 }}>
-            <span>Already have an account? </span>
-            <a href="/login">Login</a>
+          <div style={{ textAlign: "center", marginTop: 10 }}>
+            <span style={{ color: "#7c3aed" }}>Already have an account? </span>
+            <a
+              href="/login"
+              style={{
+                color: "#7c3aed",
+                fontWeight: 600,
+                textDecoration: "underline",
+                marginLeft: 2,
+              }}
+            >
+              Login
+            </a>
           </div>
         </Form>
       ) : (
