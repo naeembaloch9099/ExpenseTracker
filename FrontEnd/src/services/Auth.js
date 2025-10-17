@@ -1,7 +1,9 @@
 // src/services/Auth.js
 import axios from "axios";
 
-const API = "http://localhost:5000/api";
+// Use Vite env var VITE_API_URL if provided (e.g. http://192.168.x.x:5000/api or a tunnel URL).
+// Fallback to localhost for local development in the browser on the same machine.
+const API = import.meta?.env?.VITE_API_URL || "http://localhost:5000/api";
 
 export const login = async (email, password) => {
   const { data } = await axios.post(`${API}/auth/login`, { email, password });
