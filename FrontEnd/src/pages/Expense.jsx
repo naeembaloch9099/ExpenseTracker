@@ -7,7 +7,7 @@ import Sidebar from "../components/Sidebar";
 import { GlobalContext } from "../context/GlobalState";
 import { FaArrowDown } from "react-icons/fa";
 import ExpenseCard from "../components/ExpenseCard";
-import { useNavigate } from "react-router-dom";
+// removed unused useNavigate
 import AddExpense from "./AddExpense";
 
 const Layout = styled.div`
@@ -42,9 +42,7 @@ const Content = styled.div`
 const Expense = () => {
   const { expenses, removeExpense, addExpense, loading, error } =
     useContext(GlobalContext);
-  const [collapsed] = useState(false);
   const [showAddExpense, setShowAddExpense] = useState(false);
-  const navigate = useNavigate();
 
   // Download handler
   const handleDownload = () => {

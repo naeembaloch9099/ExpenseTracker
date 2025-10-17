@@ -322,7 +322,7 @@ const Dashboard = () => {
                   const radius = 90;
                   const cx = 110,
                     cy = 110;
-                  return cats.map((cat, idx) => {
+                  return cats.map((cat) => {
                     const percent = total ? cat.value / total : 0;
                     const startAngle = cumulative * 2 * Math.PI;
                     const endAngle = (cumulative + percent) * 2 * Math.PI;
@@ -488,7 +488,7 @@ const Dashboard = () => {
                   const radius = 80;
                   const cx = 100,
                     cy = 100;
-                  return incomePie.map((inc, idx) => {
+                  return incomePie.map((inc) => {
                     const value = inc.value;
                     const percent = total ? value / total : 0;
                     const startAngle = cumulative * 2 * Math.PI;

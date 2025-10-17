@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useEffect, useContext } from "react";
 import * as IncomeAPI from "../services/Income";
 import * as ExpenseAPI from "../services/Expense";
@@ -34,13 +35,13 @@ export const GlobalProvider = ({ children }) => {
         );
         setError(null);
       } catch (err) {
+        console.error(err);
         setError("Failed to fetch data");
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-    // eslint-disable-next-line
   }, [token, user]);
 
   // CRUD operations
@@ -52,8 +53,11 @@ export const GlobalProvider = ({ children }) => {
       try {
         const latest = await IncomeAPI.getIncomes(token);
         setIncomes(Array.isArray(latest) ? latest : latest.incomes || []);
-      } catch {}
+      } catch (err) {
+        console.error(err);
+      }
     } catch (err) {
+      console.error(err);
       setError("Failed to add income");
     }
   };
@@ -66,6 +70,7 @@ export const GlobalProvider = ({ children }) => {
       );
       toast.success("Income updated successfully!");
     } catch (err) {
+      console.error(err);
       setError("Failed to update income");
       toast.error("Failed to update income");
     }
@@ -76,6 +81,7 @@ export const GlobalProvider = ({ children }) => {
       setIncomes((prev) => prev.filter((i) => (i._id || i.id) !== id));
       toast.success("Income deleted successfully!");
     } catch (err) {
+      console.error(err);
       setError("Failed to delete income");
       toast.error("Failed to delete income");
     }
@@ -85,6 +91,7 @@ export const GlobalProvider = ({ children }) => {
       const res = await ExpenseAPI.addExpense(item, token);
       setExpenses((prev) => [res._id ? res : res.expense, ...prev]);
     } catch (err) {
+      console.error(err);
       setError("Failed to add expense");
     }
   };
@@ -97,6 +104,7 @@ export const GlobalProvider = ({ children }) => {
       );
       toast.success("Expense updated successfully!");
     } catch (err) {
+      console.error(err);
       setError("Failed to update expense");
       toast.error("Failed to update expense");
     }
@@ -107,6 +115,7 @@ export const GlobalProvider = ({ children }) => {
       setExpenses((prev) => prev.filter((e) => (e._id || e.id) !== id));
       toast.success("Expense deleted successfully!");
     } catch (err) {
+      console.error(err);
       setError("Failed to delete expense");
       toast.error("Failed to delete expense");
     }

@@ -109,7 +109,7 @@ const Signup = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [emailValid, setEmailValid] = useState(false);
   const [passwordValid, setPasswordValid] = useState(false);
-  const [show, setShow] = useState(false);
+  // password visibility removed; kept hidden by default
   const [preview, setPreview] = useState(null);
   const [err, setErr] = useState("");
   const [step, setStep] = useState(0); // 0 = form, 1 = otp

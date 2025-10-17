@@ -110,7 +110,7 @@ const IconPreview = styled.div`
   color: #ef4444;
 `;
 
-const AddExpense = ({ onClose }) => {
+const AddExpense = () => {
   const { addExpense } = useContext(GlobalContext);
   const [showPicker, setShowPicker] = useState(false);
   const [icon, setIcon] = useState(null);

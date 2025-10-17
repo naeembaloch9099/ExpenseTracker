@@ -8,7 +8,7 @@ import Sidebar from "../components/Sidebar";
 import { GlobalContext } from "../context/GlobalState";
 import { FaArrowUp } from "react-icons/fa";
 import IncomeCard from "../components/IncomeCard";
-import { useNavigate } from "react-router-dom";
+// removed unused useNavigate
 import AddIncome from "./AddIncome";
 
 const Layout = styled.div`
@@ -42,9 +42,7 @@ const Content = styled.div`
 const Income = () => {
   const { incomes, removeIncome, updateIncome, loading, error } =
     useContext(GlobalContext);
-  const [collapsed] = useState(false);
   const [showAddIncome, setShowAddIncome] = useState(false);
-  const navigate = useNavigate();
 
   // Download handler
   const handleDownload = () => {
