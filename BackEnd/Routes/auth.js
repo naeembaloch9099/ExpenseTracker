@@ -5,6 +5,8 @@ import {
   getProfile,
   sendOtp,
   verifyOtpAndRegister,
+  requestPasswordReset,
+  resetPassword,
   updateProfile,
   deleteAccount,
 } from "../Controllers/authController.js";
@@ -17,6 +19,8 @@ router.post("/login", login);
 router.get("/profile", protect, getProfile);
 router.post("/send-otp", sendOtp);
 router.post("/verify-otp", verifyOtpAndRegister);
+router.post("/request-password-reset", requestPasswordReset);
+router.post("/reset-password", resetPassword);
 router.put("/profile", protect, updateProfile);
 router.delete("/profile", protect, deleteAccount);
 

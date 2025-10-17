@@ -232,12 +232,19 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <Navbar
-        onToggleSidebar={() => setSidebarOpen((v) => !v)}
-        showHamburger={isMobile}
+      {isMobile && (
+        <Navbar
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          open={sidebarOpen}
+        />
+      )}
+      <Sidebar
+        collapsed={isMobile}
+        open={sidebarOpen}
+        user={user}
+        onRequestClose={() => setSidebarOpen(false)}
       />
-      <Sidebar collapsed={isMobile} open={sidebarOpen} user={user} />
-      <Main style={isMobile ? { paddingLeft: 240 } : {}}>
+      <Main>
         <Content>
           {/* Row 1 - Summary */}
           <SummaryRow>

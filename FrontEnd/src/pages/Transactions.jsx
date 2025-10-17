@@ -61,6 +61,8 @@ const Td = styled.td`
 const TransactionsPage = () => {
   const { incomes, expenses } = useContext(GlobalContext);
   const { user } = useContext(AuthContext);
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 900;
 
   // Merge and sort all transactions by date desc
   const allTx = [
@@ -93,8 +95,18 @@ const TransactionsPage = () => {
 
   return (
     <Layout>
-      <Navbar />
-      <Sidebar user={user} />
+      {isMobile && (
+        <Navbar
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          open={sidebarOpen}
+        />
+      )}
+      <Sidebar
+        user={user}
+        collapsed={isMobile}
+        open={sidebarOpen}
+        onRequestClose={() => setSidebarOpen(false)}
+      />
       <Main>
         <Content>
           <div

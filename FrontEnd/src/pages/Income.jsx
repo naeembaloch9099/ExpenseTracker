@@ -43,6 +43,8 @@ const Income = () => {
   const { incomes, removeIncome, updateIncome, loading, error } =
     useContext(GlobalContext);
   const [showAddIncome, setShowAddIncome] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 900;
 
   // Download handler
   const handleDownload = () => {
@@ -67,9 +69,18 @@ const Income = () => {
 
   return (
     <Layout>
-      <Navbar />
+      {isMobile && (
+        <Navbar
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          open={sidebarOpen}
+        />
+      )}
       <Main>
-        <Sidebar collapsed={window.innerWidth <= 700} />
+        <Sidebar
+          collapsed={isMobile}
+          open={sidebarOpen}
+          onRequestClose={() => setSidebarOpen(false)}
+        />
         <Content>
           {/* Income Overview Bar Chart */}
           <div

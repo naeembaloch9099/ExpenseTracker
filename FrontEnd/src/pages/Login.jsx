@@ -190,6 +190,11 @@ const Login = () => {
             Sign Up
           </Link>
         </div>
+        <div style={{ textAlign: "center", marginTop: 8 }}>
+          <Link to="/forgot-password" style={{ color: "#6b21a8" }}>
+            Forgot password?
+          </Link>
+        </div>
       </Card>
     </Container>
   );

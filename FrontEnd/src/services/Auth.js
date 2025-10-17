@@ -43,3 +43,19 @@ export const logout = () => {
   // Just remove token on frontend
   localStorage.removeItem("et_token");
 };
+
+export const requestPasswordReset = async (email) => {
+  const { data } = await axios.post(`${API}/auth/request-password-reset`, {
+    email,
+  });
+  return data;
+};
+
+export const resetPassword = async (email, token, password) => {
+  const { data } = await axios.post(`${API}/auth/reset-password`, {
+    email,
+    token,
+    password,
+  });
+  return data;
+};

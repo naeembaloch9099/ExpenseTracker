@@ -59,6 +59,14 @@ const Profile = styled.div`
   }
 `;
 
+const AppTitle = styled.h2`
+  margin: 8px 0 12px 20px;
+  font-size: 1.25rem;
+  color: var(--sidebar-color, #fff);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+`;
+
 const NavItem = styled.button`
   display: flex;
   align-items: center;
@@ -116,7 +124,7 @@ const LogoutButton = styled.button`
   }
 `;
 
-const Sidebar = ({ collapsed, open }) => {
+const Sidebar = ({ collapsed, open, onRequestClose }) => {
   const { user, logout, updateProfile, deleteAccount } =
     useContext(AuthContext);
   const navigate = useNavigate();
@@ -125,39 +133,17 @@ const Sidebar = ({ collapsed, open }) => {
   const [profilePic, setProfilePic] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [theme, setTheme] = useState(
-    () => localStorage.getItem("et_theme") || "dark"
-  );
+
+  // When on mobile, `collapsed` is true by default; if the sidebar is opened via
+  // the hamburger, `open` will be true — treat that as expanded. Compute an
+  // effective collapsed flag that hides labels only when collapsed and NOT open.
+  const isCollapsed = collapsed && !open;
 
   useEffect(() => {
     setName(user?.name || "");
   }, [user]);
 
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.style.setProperty(
-        "--sidebar-bg",
-        "linear-gradient(180deg, #6b21a8, #8b5cf6)"
-      );
-      document.documentElement.style.setProperty("--sidebar-color", "#fff");
-      document.documentElement.style.setProperty("--sidebar-hover", "#fbbf24");
-      document.documentElement.style.setProperty("--body-bg", "#242424");
-      document.body.style.background = "#242424";
-    } else {
-      document.documentElement.style.setProperty(
-        "--sidebar-bg",
-        "linear-gradient(180deg, #f3f4f6, #fff)"
-      );
-      document.documentElement.style.setProperty("--sidebar-color", "#3b0764");
-      document.documentElement.style.setProperty("--sidebar-hover", "#6d28d9");
-      document.documentElement.style.setProperty("--body-bg", "#f3f4f6");
-      document.body.style.background = "#f3f4f6";
-    }
-    localStorage.setItem("et_theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () =>
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  // theme toggling removed - header icon was removed per request
 
   const handleSave = async () => {
     setSaving(true);
@@ -202,70 +188,67 @@ const Sidebar = ({ collapsed, open }) => {
 
   return (
     <SidebarContainer open={open}>
-      {/* Theme toggle at the top right of sidebar */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          padding: "0 18px 8px 0",
-        }}
-      >
+      {/* Close button for mobile when sidebar is open */}
+      {open && (
         <button
-          onClick={toggleTheme}
+          onClick={() => onRequestClose && onRequestClose()}
+          aria-label="Close menu"
           style={{
+            position: "absolute",
+            top: 10,
+            right: 12,
             background: "none",
             border: "none",
-            color: "inherit",
+            color: "rgba(255,255,255,0.9)",
             fontSize: 26,
             cursor: "pointer",
-            outline: "none",
-            marginLeft: "auto",
-            marginTop: 2,
-            marginBottom: 2,
-            transition: "color 0.2s",
+            zIndex: 250,
           }}
-          aria-label="Toggle theme"
         >
-          {theme === "dark" ? <FaSun /> : <FaMoon />}
+          &times;
         </button>
-      </div>
+      )}
+      {/* removed top theme toggle */}
+      {!isCollapsed && <AppTitle>Expense Tracker</AppTitle>}
       <Profile>
         <img src={user?.profilePic || "/default-avatar.png"} alt="profile" />
-        {!collapsed && <h3>{user?.name || "Guest"}</h3>}
-        {!collapsed && <p>{user?.email || ""}</p>}
+        {!isCollapsed && <h3>{user?.name || "Guest"}</h3>}
+        {!isCollapsed && <p>{user?.email || ""}</p>}
       </Profile>
 
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, paddingLeft: isCollapsed ? 12 : 36 }}>
         <NavItem
           onClick={() => {
             navigate("/dashboard");
             toast.info("Dashboard opened");
+            if (onRequestClose) onRequestClose();
           }}
         >
-          <FaHome /> {!collapsed && "Dashboard"}
+          <FaHome /> {!isCollapsed && "Dashboard"}
         </NavItem>
         <NavItem
           onClick={() => {
             navigate("/income");
             toast.info("Income page opened");
+            if (onRequestClose) onRequestClose();
           }}
         >
-          <FaMoneyBillWave /> {!collapsed && "Income"}
+          <FaMoneyBillWave /> {!isCollapsed && "Income"}
         </NavItem>
         <NavItem
           onClick={() => {
             navigate("/expense");
             toast.info("Expense page opened");
+            if (onRequestClose) onRequestClose();
           }}
         >
-          <FaWallet /> {!collapsed && "Expense"}
+          <FaWallet /> {!isCollapsed && "Expense"}
         </NavItem>
         <NavItem
           style={{ marginTop: 12, background: "rgba(255,255,255,0.08)" }}
           onClick={() => setShowSettings(true)}
         >
-          <FaCog /> {!collapsed && "Settings"}
+          <FaCog /> {!isCollapsed && "Settings"}
         </NavItem>
       </div>
 
@@ -277,7 +260,7 @@ const Sidebar = ({ collapsed, open }) => {
             navigate("/login");
           }}
         >
-          <FaSignOutAlt /> {!collapsed && "Logout"}
+          <FaSignOutAlt /> {!isCollapsed && "Logout"}
         </LogoutButton>
       </Footer>
 

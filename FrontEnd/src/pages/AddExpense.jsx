@@ -112,6 +112,8 @@ const IconPreview = styled.div`
 
 const AddExpense = () => {
   const { addExpense } = useContext(GlobalContext);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 900;
   const [showPicker, setShowPicker] = useState(false);
   const [icon, setIcon] = useState(null);
   const [form, setForm] = useState({ title: "", amount: "", date: "" });
@@ -136,8 +138,18 @@ const AddExpense = () => {
 
   return (
     <Container>
-      <Navbar />
+      {isMobile && (
+        <Navbar
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          open={sidebarOpen}
+        />
+      )}
       <Main>
+        <Sidebar
+          collapsed={isMobile}
+          open={sidebarOpen}
+          onRequestClose={() => setSidebarOpen(false)}
+        />
         <FormWrapper>
           <Title>Add Expense</Title>
           <Form onSubmit={submit} autoComplete="off">

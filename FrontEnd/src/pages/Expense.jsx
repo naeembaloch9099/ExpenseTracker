@@ -43,6 +43,8 @@ const Expense = () => {
   const { expenses, removeExpense, addExpense, loading, error } =
     useContext(GlobalContext);
   const [showAddExpense, setShowAddExpense] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 900;
 
   // Download handler
   const handleDownload = () => {
@@ -67,9 +69,18 @@ const Expense = () => {
 
   return (
     <Layout>
-      <Navbar />
+      {isMobile && (
+        <Navbar
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          open={sidebarOpen}
+        />
+      )}
       <Main>
-        <Sidebar collapsed={window.innerWidth <= 700} />
+        <Sidebar
+          collapsed={isMobile}
+          open={sidebarOpen}
+          onRequestClose={() => setSidebarOpen(false)}
+        />
         <Content>
           {/* Expense Overview Bar Chart */}
           <div

@@ -139,11 +139,25 @@ const AddIncome = ({ onClose }) => {
     }
   };
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 900;
+
   return (
     <Container>
-      {!onClose && <Navbar />}
+      {!onClose && (
+        <Navbar
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          open={sidebarOpen}
+        />
+      )}
       <Main>
-        {!onClose && <Sidebar collapsed={window.innerWidth <= 700} />}
+        {!onClose && (
+          <Sidebar
+            collapsed={isMobile}
+            open={sidebarOpen}
+            onRequestClose={() => setSidebarOpen(false)}
+          />
+        )}
         <FormWrapper>
           <Title>Add Income</Title>
           <Form onSubmit={submit}>
